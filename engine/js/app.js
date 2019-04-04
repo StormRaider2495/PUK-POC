@@ -87,11 +87,11 @@ var doPan = function (x, y, rel, anim) {
 }
 
 var alterDocColors = function() {
-    $('.page-container').addClass('')
+    $('.page-container').addClass('yellow-overlay');
 }
 
 var resetAlterColors = function() {
-    $('.page-container').removeClass('')
+    $('.page-container').removeClass('yellow-overlay');
 }
 
 

@@ -74,6 +74,7 @@ body{
     font-weight: bold;
     background-color: #73AAFD;
     color: #171515;
+    border: 0;
 }
 
 .settings-container {
@@ -85,7 +86,8 @@ body{
     width: 226px;
     padding: 2px;
     position: absolute;
-    bottom: 0;
+    bottom: 0px;
+    left: 10px;
     background-color: #fdfdfd;
     display: none;
 }
@@ -119,4 +121,37 @@ button.close, button.close:hover, button.close:focus {
     outline: none;
     transform: matrix(1, 0, 0, 1, 0, 50);
     padding: 10px;
+}
+
+main.page-container.yellow-overlay {
+    background-color: #cdcd9b;
+    color: #000;
+}
+
+.yellow-overlay .hint {
+    background-color: #bbbb8b;
+    border-color: #848453;
+}
+
+.yellow-overlay button.settings-popup {
+    background-color: #165698;
+    color: #cdcd9b;
+}
+
+.yellow-overlay .settings-popup-modal button {
+    background-color: #165698;
+    color: #cdcd9b;
+}
+
+.yellow-overlay .settings-popup-modal {
+    background-color: #cdcd9b;
+    border:  2px solid #165698;
+}
+
+.yellow-overlay .svg-legend {
+    border-color: #619787;
+}
+
+.settings-container button:hover, .settings-container button:focus {
+    background-color: #2579e0;
 }
