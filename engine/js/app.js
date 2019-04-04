@@ -1,5 +1,5 @@
 
-var fullData, SVGData, contentData;
+var fullData, SVGData, contentData, panzoomInstance;
 // document ready block.
 $(document).ready(function () {
     //data calling block
@@ -11,7 +11,9 @@ $(document).ready(function () {
         contentData = fullData.content;
 
         populateQus(contentData);
-        populateSVG(SVGData)
+        populateSVG(SVGData);
+
+        engageSettingPopup();
     });
 
 });
@@ -22,9 +24,11 @@ var populateQus = function (data) {
     $(".question-container .instruction").html(data.instruction);
     $(".svg-container .svg-legend").html(data.svgLegend);
 };
+
 var populateSVG = function (data) {
-    drawGrid(data.baseGrid);
+    initializePaperData(data.baseGrid);
+    createPaper();
+    renderGrid();
     drawObstacles(data.obstacles);
     drawDraggable(data.draggable);
 }
-
