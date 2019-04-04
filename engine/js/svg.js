@@ -90,7 +90,6 @@ function onDragStart() {
 function onDragMove(dx, dy) {
     this.attr({ cx: this.ox + dx, cy: this.oy + dy });
     resizeCircle.attr({ cx: this.ox + this.r + dx, cy: this.oy + dy });
-    console.log(this.attr('cx'), this.attr('cy'));
 }
 
 function onDragComplete() {
@@ -99,7 +98,6 @@ function onDragComplete() {
     var minYvalid = ((canvasHeight / 2) - this.attr('r')) * -1;
     var maxXVaild = canvasWidth + 50 - this.attr('r');
     var minXVaild = (50 + this.attr('r'));
-    console.log(maxXVaild);
     if ((this.attr('cy') > maxYValid) || (this.attr('cy') < minYvalid) || (this.attr('cx') < minXVaild) || (this.attr('cx') > maxXVaild)) {
         reinitializeDrag();
     }
@@ -117,11 +115,37 @@ function resizeonDragMove(dx) {
     }
 };
 function resizeonDragComplete() {
-    console.log('draged1');
-
+    var drgEdges = calcDragEdges();
+    var maxmin = getMaxMinEdges();
+    console.log(drgEdges);
+    console.log(maxmin);
+    console.log((drgEdges.top > maxmin.maxY), (drgEdges.right > maxmin.maxX), (drgEdges.left < maxmin.minX), (drgEdges.bottom < maxmin.minY));
+    if ((drgEdges.top > maxmin.maxY) || (drgEdges.right > maxmin.maxX) || (drgEdges.left < maxmin.minX) || (drgEdges.bottom < maxmin.minY)) {
+        reinitializeDrag();
+    }
 }
 
 var reinitializeDrag = function () {
     draggable.attr({ cx: 0, cy: 0, r: 20 });
     resizeCircle.attr({ cx: 20, cy: 0 });
+}
+
+
+
+var calcDragEdges = function () {
+    var topEdge = draggable.attr('cy') + draggable.attr('r');
+    var rightEdge = draggable.attr('cx') + draggable.attr('r')-50;
+    var leftEgde = draggable.attr('cx') - draggable.attr('r') + 50;
+    var bottomEgde = (draggable.attr('cy') - draggable.attr('r'));
+    return { "top": topEdge, "right": rightEdge, "left": leftEgde, "bottom": bottomEgde };
+}
+
+
+
+var getMaxMinEdges = function () {
+    var maxXVaild = canvasWidth;
+    var maxYValid = (canvasHeight / 2);
+    var minXVaild = 100;
+    var minYvalid = (canvasHeight / 2) * -1;
+    return { "maxY": maxYValid, "maxX": maxXVaild, "minX": minXVaild, "minY": minYvalid };
 }
