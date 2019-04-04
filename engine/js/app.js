@@ -11,7 +11,7 @@ $(document).ready(function () {
         contentData = fullData.content;
 
         populateQus(contentData);
-        // populateSVG(SVGData);
+        populateSVG(SVGData);
 
         engageSettingPopup();
     });
@@ -26,7 +26,9 @@ var populateQus = function (data) {
 };
 
 var populateSVG = function (data) {
-    drawGrid(data.baseGrid);
+    initializePaperData(data.baseGrid);
+    createPaper();
+    renderGrid();
     drawObstacles(data.obstacles);
     drawDraggable(data.draggable);
 }

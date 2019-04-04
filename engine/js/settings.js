@@ -21,6 +21,8 @@ var initializePanZoomFuncitonality = function () {
     panzoomInstance = panzoomElem.panzoom({
         cursor: "default",
         contain: "invert", 
+        disablePan: true,
+//   disableZoom: true,
         minScale: 1,
         maxScale: 5,
         $zoomIn: panzoomElem.parent().eq(0).find("#zoomIn"),
