@@ -12,15 +12,55 @@
 
 <body>
     <main class="page-container">
-        <div class="question-container">
-            <div class="qustionContent"></div>
-            <div class="hint"></div>
-            <div class="instruction"></div>
+        <div class="inner-page-container">
+            <div class="question-container">
+                <div class="qustionContent"></div>
+                <div class="hint"></div>
+                <div class="instruction"></div>
+            </div>
+            <div class="svg-container">
+                <div class="svg-legend"></div>
+                <svg></svg>
+            </div>
         </div>
-        <div class="svg-container">
-            <div class="svg-legend"></div>
-            <svg></svg>
+        
+        <button class="settings-popup">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+        <div class="settings-popup-modal" aria-haspopup="true">
+            <button class="close">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <div class="modal-heading">Settings</div>
+            <div class="settings-container">
+                <button id="colorReset">color reset</button>
+                <button id="panUp">
+                    <i class="glyphicon glyphicon-arrow-up"></i>
+                </button>
+                <button id="switchColors">switch colors</button>
+
+                <button id="panLeft">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </button>
+                <button id="zoomIn">
+                    <i class="glyphicon glyphicon-zoom-in"></i>
+                </button>
+                <button id="panRight">
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                </button>
+
+                <button id="zoomReset">zoom reset</button>
+                <button id="panDown">
+                    <i class="glyphicon glyphicon-arrow-down"></i>
+                </button>
+                <button id="zoomOut">
+                    <i class="glyphicon glyphicon-zoom-out"></i>
+                </button>
+            </div>
+            <div class="clearfix"></div>
         </div>
+
     </main>
 
     <!-- Library Scripts -->
@@ -32,6 +72,8 @@
     <script type="text/javascript" src="./engine/libs/bootstrap/popper.min.js"></script>
     <script type="text/javascript" src="./engine/libs/bootstrap/bootstrap.min.js"></script>
 
+    <!-- <script src='https://unpkg.com/panzoom@7.1.2/dist/panzoom.min.js'></script> -->
+    <script type="text/javascript" src="./engine/libs/panzoom/jquery.panzoom.js"></script>
     <!-- Custom Scripts -->
     <script type="text/javascript" src="./engine/js/app.js"></script>
 

@@ -5,16 +5,17 @@ body{
 }
 
 .page-container{
-    position: relative;
     width: 768px;
-    min-height: 500px;
+    min-height: 600px;
     margin: 0 auto;
     padding-top: 35px;
+    overflow: hidden;
 }
 
 .question-container {
-    width: 250px;
+    width: 230px;
     float: left;
+    min-height: 500px;
 }
 
 .svg-container {
@@ -37,4 +38,85 @@ body{
     border: 2px solid #1e90ff;
     padding: 7px;
     border-radius: 7px;
+}
+
+.settings-popup {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    position: absolute;
+    bottom: 0px;
+    left: 10px;
+    background-color: #73AAFD;
+    color: #fdfdfd;
+}
+
+.settings-container button {
+    width: 65px;
+    height: 45px;
+    margin: 3px;
+    float: left;
+    font-weight: bold;
+    background-color: #73AAFD;
+    color: #171515;
+}
+
+.settings-container {
+    width: 100%;
+}
+
+.settings-popup-modal {
+    border: 4px solid #73AAFD;
+    width: 226px;
+    padding: 2px;
+    position: absolute;
+    bottom: 0;
+    background-color: #fdfdfd;
+    display: none;
+}
+
+.modal-heading {
+    margin-left: 4px;
+    margin-bottom: 5px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #121f33;
+}
+
+.settings-container button .glyphicon {
+    font-size: 27px;
+}
+
+button.close, button.close:hover, button.close:focus {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    top: -11px;
+    right: -10px;
+    background-color: #ea3f3f !important;
+    color: #fdfdfd;
+    opacity: 1;
+    font-size: 14px;
+}
+
+.inner-page-container {
+    min-height: 500px;
+    outline: none;
+    transform: matrix(1, 0, 0, 1, 0, 50);
+    padding: 10px;
 }
