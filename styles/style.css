@@ -154,4 +154,7 @@ main.page-container.yellow-overlay {
 
 .settings-container button:hover, .settings-container button:focus {
     background-color: #2579e0;
+#canvas{
+    height: 500px;
+    width: 500px;
 }
