@@ -21,14 +21,14 @@ var initializePanZoomFuncitonality = function () {
     panzoomInstance = panzoomElem.panzoom({
         cursor: "default",
         contain: "invert", 
-        disablePan: true,
-//   disableZoom: true,
         minScale: 1,
         maxScale: 5,
         $zoomIn: panzoomElem.parent().eq(0).find("#zoomIn"),
         $zoomOut: panzoomElem.parent().eq(0).find("#zoomOut"),
         $reset: panzoomElem.parent().eq(0).find("#zoomReset")
       });
+      // allow child dragging event
+      panzoomInstance = panzoomElem.panzoom("option","ignoreChildrensEvents",true);
 }
 
 var bindSettingsFunctionality = function () {
