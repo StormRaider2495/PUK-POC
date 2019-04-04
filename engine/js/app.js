@@ -24,6 +24,7 @@ var populateQus = function (data) {
     $(".question-container .instruction").html(data.instruction);
     $(".svg-container .svg-legend").html(data.svgLegend);
 };
+
 var populateSVG = function (data) {
     drawGrid(data.baseGrid);
     drawObstacles(data.obstacles);
@@ -48,6 +49,7 @@ var engageSettingPopup = function () {
 
 var initializePanZoomFuncitonality = function () {
     var panzoomElem = $('.inner-page-container');
+    // initialize jquery panzoom element with config
     panzoomInstance = panzoomElem.panzoom({
         cursor: "default",
         contain: "invert", 
@@ -57,19 +59,6 @@ var initializePanZoomFuncitonality = function () {
         $zoomOut: panzoomElem.parent().eq(0).find("#zoomOut"),
         $reset: panzoomElem.parent().eq(0).find("#zoomReset")
       });
-    //  panzoomInstance = panzoom($('.inner-page-container')[0], {
-    //     beforeWheel: function (e) {
-    //         // allow wheel-zoom only if altKey is down. Otherwise - ignore
-    //         var shouldIgnore = !e.altKey;
-    //         return shouldIgnore;
-    //     },
-    //     onDoubleClick: function(e) {
-    //         // `e` - is current double click event.
-        
-    //         return false; // tells the library to not preventDefault, and not stop propagation
-    //     },
-    //     center: 1
-    // });
 }
 
 var bindSettingsFunctionality = function () {
