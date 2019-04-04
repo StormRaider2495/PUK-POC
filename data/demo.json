@@ -13,10 +13,10 @@
             "opacity": 0.8
         },
         "baseGrid": {
-            "height": 600,
-            "width": 500,
-            "vertical": 18,
-            "horizontal": 19
+            "height": 500,
+            "width": 400,
+            "vertical": 19,
+            "horizontal": 18
         },
         "obstacles": {
             "path": {
@@ -35,11 +35,11 @@
                     },
                     {
                         "x": 13.5,
-                        "y": 16
+                        "y": 17
                     },
                     {
                         "x": 2,
-                        "y": 16
+                        "y": 17
                     },
                     {
                         "x": 2,

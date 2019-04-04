@@ -38,3 +38,7 @@ body{
     padding: 7px;
     border-radius: 7px;
 }
+#canvas{
+    height: 500px;
+    width: 500px;
+}

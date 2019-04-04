@@ -23,7 +23,9 @@ var populateQus = function (data) {
     $(".svg-container .svg-legend").html(data.svgLegend);
 };
 var populateSVG = function (data) {
-    drawGrid(data.baseGrid);
+    initializePaperData(data.baseGrid);
+    createPaper();
+    renderGrid();
     drawObstacles(data.obstacles);
     drawDraggable(data.draggable);
 }
