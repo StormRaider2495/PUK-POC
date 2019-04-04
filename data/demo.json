@@ -1,0 +1,96 @@
+{
+    "content": {
+        "qustionContent": "<p>Ann is a landscape gardener. She designs a pond in a park.</p><p>The pond needs a circular space with a diameter between 4.8 m and 5.7 m.</p><p>The edge of the pond needs to be</p><ul><li>at least 2 m from the path</li><li>at least 1 m from the trees.</li></ul>",
+        "hint": "Draw the space for the pond on the grid. Remember to use the key. (3)",
+        "instruction": "Drag the icon to the grid. Resize the icon by dragging the dot.",
+        "svgLegend": "<strong>Key</strong> 1 square on the grid is 75cm by 75cm in the park"
+    },
+    "svg": {
+        "draggable": {
+            "struc": "circle",
+            "unit": 20,
+            "color": "#1e90ff",
+            "opacity": 0.8
+        },
+        "baseGrid": {
+            "height": 600,
+            "width": 500,
+            "vertical": 18,
+            "horizontal": 19
+        },
+        "obstacles": {
+            "path": {
+                "cordinates": [
+                    {
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "x": 0,
+                        "y": 19
+                    },
+                    {
+                        "x": 13.5,
+                        "y": 19
+                    },
+                    {
+                        "x": 13.5,
+                        "y": 16
+                    },
+                    {
+                        "x": 2,
+                        "y": 16
+                    },
+                    {
+                        "x": 2,
+                        "y": 0
+                    },
+                    {
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "color": "#dddddd",
+                "opacity": 0.8,
+                "text": "Path",
+                "distance": 2.6
+            },
+            "trees": {
+                "cordinates": [
+                    {
+                        "x": 18,
+                        "y": 0
+                    },
+                    {
+                        "x": 18,
+                        "y": 8
+                    },
+                    {
+                        "x": 14.5,
+                        "y": 8
+                    },
+                    {
+                        "x": 14.5,
+                        "y": 3.5
+                    },
+                    {
+                        "x": 9,
+                        "y": 3.5
+                    },
+                    {
+                        "x": 9,
+                        "y": 0
+                    },
+                    {
+                        "x": 18,
+                        "y": 0
+                    }
+                ],
+                "color": "#a2f18c",
+                "opacity": 0.8,
+                "text": "Trees",
+                "distance": 1.3
+            }
+        }
+    }
+}

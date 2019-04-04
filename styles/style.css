@@ -1,0 +1,40 @@
+body{
+    font:20px/20px 'ComicSansMSRegular';
+    font-weight: normal;
+    overflow:auto;
+}
+
+.page-container{
+    position: relative;
+    width: 768px;
+    min-height: 500px;
+    margin: 0 auto;
+    padding-top: 35px;
+}
+
+.question-container {
+    width: 250px;
+    float: left;
+}
+
+.svg-container {
+    width: 518px;
+    min-height: 500px;
+    float: left;
+}
+
+.hint {
+    margin: 25px 10px;
+    border: 3px solid #cecdcd;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+
+.svg-legend {
+    width: 60%;
+    margin: 0 auto;
+    border: 2px solid #1e90ff;
+    padding: 7px;
+    border-radius: 7px;
+}
