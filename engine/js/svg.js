@@ -101,6 +101,9 @@ function onDragComplete() {
     if ((this.attr('cy') > maxYValid) || (this.attr('cy') < minYvalid) || (this.attr('cx') < minXVaild) || (this.attr('cx') > maxXVaild)) {
         reinitializeDrag();
     }
+    console.log('cx:' + this.attr('cx') + ' cy:' + this.attr('cy'));
+
+    getClosestPointDistance(this.attr('cx'),  this.attr('cy'),  this.attr('r') );
 };
 
 function resizeonDragStart() {
@@ -114,6 +117,7 @@ function resizeonDragMove(dx) {
         draggable.attr({ r: this.distance + dx });
     }
 };
+
 function resizeonDragComplete() {
     var drgEdges = calcDragEdges();
     var maxmin = getMaxMinEdges();
@@ -130,8 +134,6 @@ var reinitializeDrag = function () {
     resizeCircle.attr({ cx: 20, cy: 0 });
 }
 
-
-
 var calcDragEdges = function () {
     var topEdge = draggable.attr('cy') + draggable.attr('r');
     var rightEdge = draggable.attr('cx') + draggable.attr('r')-50;
@@ -140,12 +142,41 @@ var calcDragEdges = function () {
     return { "top": topEdge, "right": rightEdge, "left": leftEgde, "bottom": bottomEgde };
 }
 
-
-
 var getMaxMinEdges = function () {
     var maxXVaild = canvasWidth;
     var maxYValid = (canvasHeight / 2);
     var minXVaild = 100;
     var minYvalid = (canvasHeight / 2) * -1;
     return { "maxY": maxYValid, "maxX": maxXVaild, "minX": minXVaild, "minY": minYvalid };
+}
+
+var getClosestPointDistance = function (cx, cy, r) {
+    var circleTopPoint = [cx, cy - r];
+    var circleLeftPoint = [cx - r, cy];
+    var circleRightPoint = [cx + r, cy];
+    var circleBottomPoint = [cx, cy + r];
+
+    var boundingTopPoint = [0, cy -r];
+    var boundingLeftPoint = [cx - r, 0];
+    var boundingRightPoint = [cx + r, 0];
+    var boundingBottomPoint = [0, cy + r];
+
+    var pathCoordinates = fullData.svg.obstacles.path.cordinates;
+
+    for (let index = 0; index < pathCoordinates.length - 1; index++) {
+        const pointA = pathCoordinates[index];
+        const pointB = pathCoordinates[index + 1];
+        getDistanceBetweenLineAndPoint(pointA, pointB, circleLeftPoint)
+    }    
+}
+
+
+
+var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy) {
+    var a = pointA.y - pointB.y,
+        b = pointB.x - pointA.x,
+        c = (pointA.x * pointB.y) - (pointB.x * pointA.y),
+        distance = Math.abs(a * Pxy[0] + b * Pxy[1] + c) / Math.sqrt(a * a + b * b);
+        console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) distance:${distance}`);
+    return distance;
 }
