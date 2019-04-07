@@ -151,32 +151,71 @@ var getMaxMinEdges = function () {
 }
 
 var getClosestPointDistance = function (cx, cy, r) {
-    var circleTopPoint = [cx, cy - r];
-    var circleLeftPoint = [cx - r, cy];
-    var circleRightPoint = [cx + r, cy];
-    var circleBottomPoint = [cx, cy + r];
+    var circleTopPoint = { 'x' : cx,'y' : cy - r };
+    var circleLeftPoint = { 'x':cx - r,'y': cy };
+    var circleRightPoint = { 'x' : cx + r, 'y': cy };
+    var circleBottomPoint = { 'x' : cx, 'y': cy + r };
 
-    var boundingTopPoint = [0, cy -r];
-    var boundingLeftPoint = [cx - r, 0];
-    var boundingRightPoint = [cx + r, 0];
-    var boundingBottomPoint = [0, cy + r];
+    var boundingTopPoint = { 'x' : 0, 'y': cy -r };
+    var boundingLeftPoint = { 'x' : cx - r, 'y': 0 };
+    var boundingRightPoint = { 'x' : cx + r, 'y': 0 };
+    var boundingBottomPoint = { 'x' : 0, 'y': cy + r };
 
     var pathCoordinates = fullData.svg.obstacles.path.cordinates;
 
     for (let index = 0; index < pathCoordinates.length - 1; index++) {
         const pointA = pathCoordinates[index];
         const pointB = pathCoordinates[index + 1];
-        getDistanceBetweenLineAndPoint(pointA, pointB, circleLeftPoint)
+        getDistanceBetweenLineAndPoint(pointA, pointB, circleLeftPoint, boundingLeftPoint)
     }    
 }
 
 
+/*
+* point A and point B are points on the path which are joined
+* Pxy is an egde point on the circle
+* Bxy is an edge point on the bounding svg
+* Here, PointA and PointB points are used to get a straight line equation A1x + B1y + C1 = 0
+* Then, solve for Pxy and Bxy to get A2x + B2y + C2 = 0
+* Now if the two lines intersect, then distance d is to be calculated
+*/
+var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
+    /*
+    * getting line equation of two points (x1,y1) and (x2,y2)
+    * A = y2 - y1
+    * B = x1 - x2
+    * C = Ax1 + By1
+     */
+    // getting line equation A1x + B1y + C1 = 0 from pointA and pointB
+    var A1 = pointB.y - pointA.y,
+        B1 = pointA.x - pointB.x,
+        C1 = (A1 * pointA.x) + (B1 * pointA.y);
+    
+    // getting line equation A2x + B2y + C2 = 0 from Pxy and Bxy
+    var A2 = Pxy.y - Bxy.y,
+        B2 = Bxy.x - Pxy.x,
+        C2 = (Pxy.x * Bxy.y) - (Bxy.x * Pxy.y);
+    
+    // Noww check for intersection
+    var det = A1 * B2 - A2 * B1;
+    if(det == 0) {
+        // the two lines are parallel
+        console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) run parallel`);
+    } else {
+        // find intersection coordinates
+        var x = (B2 * C1 - B1 * C2) / det,
+            y = (A1 * C2 - A2 * C1) / det;
 
-var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy) {
-    var a = pointA.y - pointB.y,
-        b = pointB.x - pointA.x,
-        c = (pointA.x * pointB.y) - (pointB.x * pointA.y),
-        distance = Math.abs(a * Pxy[0] + b * Pxy[1] + c) / Math.sqrt(a * a + b * b);
+        // find the distance
+        // |A*X0 + B*Y0 + C| / sqrt(A*A + B*B)
+        var distance = Math.abs(A1 * Pxy.x + B1 * Pxy.y + C1) / Math.sqrt(A1 * A1 + B1 * B1);
         console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) distance:${distance}`);
-    return distance;
+    }
+
+    // var a = pointA.y - pointB.y,
+    //     b = pointB.x - pointA.x,
+    //     c = (pointA.x * pointB.y) - (pointB.x * pointA.y),
+    //     distance = Math.abs(a * Pxy.x + b * Pxy.y + c) / Math.sqrt(a * a + b * b);
+    //     console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) distance:${distance}`);
+    // return distance;
 }
