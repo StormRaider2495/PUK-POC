@@ -35,6 +35,8 @@ body{
 .svg-legend {
     width: 60%;
     margin: auto;
+    margin-left: 142px;
+    margin-bottom: 10px;
     border: 2px solid #1e90ff;
     padding: 7px;
     border-radius: 7px;
@@ -124,7 +126,7 @@ button.close, button.close:hover, button.close:focus {
     min-height: 600px;
     outline: none;
     transform: matrix(1, 0, 0, 1, 0, 30);
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 main.page-container.yellow-overlay {

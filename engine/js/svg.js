@@ -126,6 +126,8 @@ function resizeonDragComplete() {
     console.log((drgEdges.top > maxmin.maxY), (drgEdges.right > maxmin.maxX), (drgEdges.left < maxmin.minX), (drgEdges.bottom < maxmin.minY));
     if ((drgEdges.top > maxmin.maxY) || (drgEdges.right > maxmin.maxX) || (drgEdges.left < maxmin.minX) || (drgEdges.bottom < maxmin.minY)) {
         reinitializeDrag();
+    } else {
+        getClosestPointDistance(draggable.attr('cx'), draggable.attr('cy'), draggable.attr('r'));
     }
 }
 
@@ -150,10 +152,11 @@ var getMaxMinEdges = function () {
     return { "maxY": maxYValid, "maxX": maxXVaild, "minX": minXVaild, "minY": minYvalid };
 }
 
-var getClosestPointDistance = function (cx, cy, r) {
+var getClosestPointDistance = function (CircleX, CircleY, CircleRadius) {
     // TODO: Need to adjust point calculation as (0,0) of board (50,-250) of circle
-    cx = cx - 50;
-    cy = cy + 250;
+    var cx = CircleX - 50,
+        cy = CircleY + 250,
+        r = CircleRadius;
     var circleTopPoint = { 'x': cx, 'y': cy - r };
     var circleLeftPoint = { 'x': cx - r, 'y': cy };
     var circleRightPoint = { 'x': cx + r, 'y': cy };
@@ -164,14 +167,55 @@ var getClosestPointDistance = function (cx, cy, r) {
     var boundingRightPoint = { 'x': cx + r, 'y': 0 };
     var boundingBottomPoint = { 'x': 0, 'y': cy + r };
 
-    var pathCoordinates = fullData.svg.obstacles.path.cordinates;
+    let distanceObj = {
+        'diameter': CircleRadius * 2
+    };
+    for (const obstacle in fullData.svg.obstacles) {
+        distanceObj[obstacle] = {
+            'left': [],
+            'right': [],
+            'top': [],
+            'bottom': []
+        }
+        if (fullData.svg.obstacles.hasOwnProperty(obstacle)) {
+            const pathCoordinates = fullData.svg.obstacles[obstacle].cordinates;
+            // console.log('DISTANCE FROM :' + obstacle.toUpperCase());
+            for (let index = 0; index < pathCoordinates.length - 1; index++) {
+                var OriginalPointA = Object.assign({}, pathCoordinates[index]);
+                var OriginalPointB = Object.assign({}, pathCoordinates[index + 1]);
 
-    for (let index = 0; index < pathCoordinates.length - 1; index++) {
-        const pointA = pathCoordinates[index];
-        const pointB = pathCoordinates[index + 1];
-        // console.log(pointA, pointB, circleLeftPoint, boundingLeftPoint);
-        getDistanceBetweenLineAndPoint(pointA, pointB, circleLeftPoint, boundingLeftPoint)
+                const pointA = Object.assign({}, pathCoordinates[index]);
+                const pointB = Object.assign({}, pathCoordinates[index + 1]);
+                pointA.x = pointA.x * hd, pointA.y = pointA.y * vd,
+                    pointB.x = pointB.x * hd, pointB.y = pointB.y * vd;
+                // left side calculation
+                if ((cy >= pointA.y && cy <= pointB.y) || (cy >= pointB.y && cy <= pointA.y)) {
+                    var distance = Math.abs(circleLeftPoint.x - pointA.x);
+                    distanceObj[obstacle].left.push(distance);
+                    // console.log(`Left: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+                // right side calculation
+                if ((cy >= pointA.y && cy <= pointB.y) || (cy >= pointB.y && cy <= pointA.y)) {
+                    var distance = Math.abs(circleRightPoint.x - pointA.x);
+                    distanceObj[obstacle].right.push(distance);
+                    // console.log(`Right: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+                // bottom side calculation
+                if ((cx >= pointA.x && cx <= pointB.x) || (cx >= pointB.x && cx <= pointA.x)) {
+                    var distance = Math.abs(circleBottomPoint.y - pointA.y);
+                    distanceObj[obstacle].bottom.push(distance);
+                    // console.log(`Bottom: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+                // top side calculation
+                if ((cx >= pointA.x && cx <= pointB.x) || (cx >= pointB.x && cx <= pointA.x)) {
+                    var distance = Math.abs(circleTopPoint.y - pointA.y);
+                    distanceObj[obstacle].top.push(distance);
+                    // console.log(`Up: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+            }
+        }
     }
+    console.log(distanceObj);
 }
 
 
@@ -184,6 +228,10 @@ var getClosestPointDistance = function (cx, cy, r) {
 * Now if the two lines intersect, then distance d is to be calculated
 */
 var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
+    pointA = Object.assign({}, pointA);
+    pointB = Object.assign({}, pointB);
+    Pxy = Object.assign({}, Pxy);
+    Bxy = Object.assign({}, Bxy);
     console.log(pointA, pointB, Pxy, Bxy);
 
     pointA.x = pointA.x * hd, pointA.y = pointA.y * vd,
