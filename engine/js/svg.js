@@ -214,6 +214,13 @@ var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
         // |A*X0 + B*Y0 + C| / sqrt(A*A + B*B)
         var distance = Math.abs(A1 * Pxy.x + B1 * Pxy.y + C1) / Math.sqrt(A1 * A1 + B1 * B1);
         console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) distance:${distance}`);
+
+        // find distance between intersection point and Pxy
+        // Distance between two points P(x1, y1) and Q(x2, y2) is given by:
+        // d(P,Q) = Math.sqrt(Math.pow((x2-x1),2) + Math.pow((y2-y1),2))
+        var dPQ = Math.sqrt(Math.pow((Pxy.x-x),2) + Math.pow((Pxy.y-y),2));
+        console.log(`Point to point difference: ${dPQ}`)
+
     }
 
     // var a = pointA.y - pointB.y,
