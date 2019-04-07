@@ -209,7 +209,7 @@ var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
         // find intersection coordinates
         var x = (B2 * C1 - B1 * C2) / det,
             y = (A1 * C2 - A2 * C1) / det;
-
+        console.log(`intersection point: (${x}, ${y})`)
         // find the distance
         // |A*X0 + B*Y0 + C| / sqrt(A*A + B*B)
         var distance = Math.abs(A1 * Pxy.x + B1 * Pxy.y + C1) / Math.sqrt(A1 * A1 + B1 * B1);
