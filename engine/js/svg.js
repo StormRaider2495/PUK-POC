@@ -103,7 +103,7 @@ function onDragComplete() {
     }
     console.log('cx:' + this.attr('cx') + ' cy:' + this.attr('cy'));
 
-    getClosestPointDistance(this.attr('cx'),  this.attr('cy'),  this.attr('r') );
+    getClosestPointDistance(this.attr('cx'), this.attr('cy'), this.attr('r'));
 };
 
 function resizeonDragStart() {
@@ -136,7 +136,7 @@ var reinitializeDrag = function () {
 
 var calcDragEdges = function () {
     var topEdge = draggable.attr('cy') + draggable.attr('r');
-    var rightEdge = draggable.attr('cx') + draggable.attr('r')-50;
+    var rightEdge = draggable.attr('cx') + draggable.attr('r') - 50;
     var leftEgde = draggable.attr('cx') - draggable.attr('r') + 50;
     var bottomEgde = (draggable.attr('cy') - draggable.attr('r'));
     return { "top": topEdge, "right": rightEdge, "left": leftEgde, "bottom": bottomEgde };
@@ -154,23 +154,24 @@ var getClosestPointDistance = function (cx, cy, r) {
     // TODO: Need to adjust point calculation as (0,0) of board (50,-250) of circle
     cx = cx - 50;
     cy = cy + 250;
-    var circleTopPoint = { 'x' : cx,'y' : cy - r };
-    var circleLeftPoint = { 'x':cx - r,'y': cy };
-    var circleRightPoint = { 'x' : cx + r, 'y': cy };
-    var circleBottomPoint = { 'x' : cx, 'y': cy + r };
+    var circleTopPoint = { 'x': cx, 'y': cy - r };
+    var circleLeftPoint = { 'x': cx - r, 'y': cy };
+    var circleRightPoint = { 'x': cx + r, 'y': cy };
+    var circleBottomPoint = { 'x': cx, 'y': cy + r };
 
-    var boundingTopPoint = { 'x' : 0, 'y': cy -r };
-    var boundingLeftPoint = { 'x' : cx - r, 'y': 0 };
-    var boundingRightPoint = { 'x' : cx + r, 'y': 0 };
-    var boundingBottomPoint = { 'x' : 0, 'y': cy + r };
+    var boundingTopPoint = { 'x': 0, 'y': cy - r };
+    var boundingLeftPoint = { 'x': cx - r, 'y': 0 };
+    var boundingRightPoint = { 'x': cx + r, 'y': 0 };
+    var boundingBottomPoint = { 'x': 0, 'y': cy + r };
 
     var pathCoordinates = fullData.svg.obstacles.path.cordinates;
 
     for (let index = 0; index < pathCoordinates.length - 1; index++) {
         const pointA = pathCoordinates[index];
         const pointB = pathCoordinates[index + 1];
+        // console.log(pointA, pointB, circleLeftPoint, boundingLeftPoint);
         getDistanceBetweenLineAndPoint(pointA, pointB, circleLeftPoint, boundingLeftPoint)
-    }    
+    }
 }
 
 
@@ -183,7 +184,12 @@ var getClosestPointDistance = function (cx, cy, r) {
 * Now if the two lines intersect, then distance d is to be calculated
 */
 var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
-    
+    console.log(pointA, pointB, Pxy, Bxy);
+
+    pointA.x = pointA.x * hd, pointA.y = pointA.y * vd,
+        pointB.x = pointB.x * hd, pointB.y = pointB.y * vd;
+    console.log(pointA, pointB, Pxy, Bxy);
+
     /*
     * getting line equation of two points (x1,y1) and (x2,y2)
     * A = y2 - y1
@@ -194,15 +200,15 @@ var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
     var A1 = pointB.y - pointA.y,
         B1 = pointA.x - pointB.x,
         C1 = (A1 * pointA.x) + (B1 * pointA.y);
-    
+
     // getting line equation A2x + B2y + C2 = 0 from Pxy and Bxy
     var A2 = Pxy.y - Bxy.y,
         B2 = Bxy.x - Pxy.x,
         C2 = (Pxy.x * Bxy.y) - (Bxy.x * Pxy.y);
-    
+
     // Noww check for intersection
     var det = A1 * B2 - A2 * B1;
-    if(det == 0) {
+    if (det == 0) {
         // the two lines are parallel
         console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) run parallel`);
     } else {
@@ -218,7 +224,8 @@ var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
         // find distance between intersection point and Pxy
         // Distance between two points P(x1, y1) and Q(x2, y2) is given by:
         // d(P,Q) = Math.sqrt(Math.pow((x2-x1),2) + Math.pow((y2-y1),2))
-        var dPQ = Math.sqrt(Math.pow((Pxy.x-x),2) + Math.pow((Pxy.y-y),2));
+        var dPQ = Math.sqrt(Math.pow((Pxy.x - x), 2) + Math.pow((Pxy.y - y), 2));
+        console.log((Pxy.x - x), (Pxy.y - y))
         console.log(`Point to point difference: ${dPQ}`)
 
     }
