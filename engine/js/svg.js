@@ -152,6 +152,8 @@ var getMaxMinEdges = function () {
 
 var getClosestPointDistance = function (cx, cy, r) {
     // TODO: Need to adjust point calculation as (0,0) of board (50,-250) of circle
+    cx = cx - 50;
+    cy = cy + 250;
     var circleTopPoint = { 'x' : cx,'y' : cy - r };
     var circleLeftPoint = { 'x':cx - r,'y': cy };
     var circleRightPoint = { 'x' : cx + r, 'y': cy };
@@ -181,7 +183,7 @@ var getClosestPointDistance = function (cx, cy, r) {
 * Now if the two lines intersect, then distance d is to be calculated
 */
 var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
-
+    
     /*
     * getting line equation of two points (x1,y1) and (x2,y2)
     * A = y2 - y1
