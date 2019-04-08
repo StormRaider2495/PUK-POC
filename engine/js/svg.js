@@ -191,25 +191,25 @@ var getClosestPointDistance = function (CircleX, CircleY, CircleRadius) {
                 // left side calculation
                 if ((cy >= pointA.y && cy <= pointB.y) || (cy >= pointB.y && cy <= pointA.y)) {
                     var distance = Math.abs(circleLeftPoint.x - pointA.x);
-                    distanceObj[obstacle].left.push(distance);
+                    distanceObj[obstacle].left.push(distance/vd);
                     // console.log(`Left: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
                 }
                 // right side calculation
                 if ((cy >= pointA.y && cy <= pointB.y) || (cy >= pointB.y && cy <= pointA.y)) {
                     var distance = Math.abs(circleRightPoint.x - pointA.x);
-                    distanceObj[obstacle].right.push(distance);
+                    distanceObj[obstacle].right.push(distance/vd);
                     // console.log(`Right: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
                 }
                 // bottom side calculation
                 if ((cx >= pointA.x && cx <= pointB.x) || (cx >= pointB.x && cx <= pointA.x)) {
                     var distance = Math.abs(circleBottomPoint.y - pointA.y);
-                    distanceObj[obstacle].bottom.push(distance);
+                    distanceObj[obstacle].bottom.push(distance/hd);
                     // console.log(`Bottom: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
                 }
                 // top side calculation
                 if ((cx >= pointA.x && cx <= pointB.x) || (cx >= pointB.x && cx <= pointA.x)) {
                     var distance = Math.abs(circleTopPoint.y - pointA.y);
-                    distanceObj[obstacle].top.push(distance);
+                    distanceObj[obstacle].top.push(distance/hd);
                     // console.log(`Up: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
                 }
             }
