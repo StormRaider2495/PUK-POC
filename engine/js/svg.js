@@ -101,6 +101,9 @@ function onDragComplete() {
     if ((this.attr('cy') > maxYValid) || (this.attr('cy') < minYvalid) || (this.attr('cx') < minXVaild) || (this.attr('cx') > maxXVaild)) {
         reinitializeDrag();
     }
+    console.log('cx:' + this.attr('cx') + ' cy:' + this.attr('cy'));
+
+    getClosestPointDistance(this.attr('cx'), this.attr('cy'), this.attr('r'));
 };
 
 function resizeonDragStart() {
@@ -114,6 +117,7 @@ function resizeonDragMove(dx) {
         draggable.attr({ r: this.distance + dx });
     }
 };
+
 function resizeonDragComplete() {
     var drgEdges = calcDragEdges();
     var maxmin = getMaxMinEdges();
@@ -122,6 +126,8 @@ function resizeonDragComplete() {
     console.log((drgEdges.top > maxmin.maxY), (drgEdges.right > maxmin.maxX), (drgEdges.left < maxmin.minX), (drgEdges.bottom < maxmin.minY));
     if ((drgEdges.top > maxmin.maxY) || (drgEdges.right > maxmin.maxX) || (drgEdges.left < maxmin.minX) || (drgEdges.bottom < maxmin.minY)) {
         reinitializeDrag();
+    } else {
+        getClosestPointDistance(draggable.attr('cx'), draggable.attr('cy'), draggable.attr('r'));
     }
 }
 
@@ -130,17 +136,13 @@ var reinitializeDrag = function () {
     resizeCircle.attr({ cx: 20, cy: 0 });
 }
 
-
-
 var calcDragEdges = function () {
     var topEdge = draggable.attr('cy') + draggable.attr('r');
-    var rightEdge = draggable.attr('cx') + draggable.attr('r')-50;
+    var rightEdge = draggable.attr('cx') + draggable.attr('r') - 50;
     var leftEgde = draggable.attr('cx') - draggable.attr('r') + 50;
     var bottomEgde = (draggable.attr('cy') - draggable.attr('r'));
     return { "top": topEdge, "right": rightEdge, "left": leftEgde, "bottom": bottomEgde };
 }
-
-
 
 var getMaxMinEdges = function () {
     var maxXVaild = canvasWidth;
@@ -148,4 +150,138 @@ var getMaxMinEdges = function () {
     var minXVaild = 100;
     var minYvalid = (canvasHeight / 2) * -1;
     return { "maxY": maxYValid, "maxX": maxXVaild, "minX": minXVaild, "minY": minYvalid };
+}
+
+var getClosestPointDistance = function (CircleX, CircleY, CircleRadius) {
+    // TODO: Need to adjust point calculation as (0,0) of board (50,-250) of circle
+    var cx = CircleX - 50,
+        cy = CircleY + 250,
+        r = CircleRadius;
+    var circleTopPoint = { 'x': cx, 'y': cy - r };
+    var circleLeftPoint = { 'x': cx - r, 'y': cy };
+    var circleRightPoint = { 'x': cx + r, 'y': cy };
+    var circleBottomPoint = { 'x': cx, 'y': cy + r };
+
+    var boundingTopPoint = { 'x': 0, 'y': cy - r };
+    var boundingLeftPoint = { 'x': cx - r, 'y': 0 };
+    var boundingRightPoint = { 'x': cx + r, 'y': 0 };
+    var boundingBottomPoint = { 'x': 0, 'y': cy + r };
+
+    let distanceObj = {
+        'diameter': CircleRadius * 2
+    };
+    for (const obstacle in fullData.svg.obstacles) {
+        distanceObj[obstacle] = {
+            'left': [],
+            'right': [],
+            'top': [],
+            'bottom': []
+        }
+        if (fullData.svg.obstacles.hasOwnProperty(obstacle)) {
+            const pathCoordinates = fullData.svg.obstacles[obstacle].cordinates;
+            // console.log('DISTANCE FROM :' + obstacle.toUpperCase());
+            for (let index = 0; index < pathCoordinates.length - 1; index++) {
+                var OriginalPointA = Object.assign({}, pathCoordinates[index]);
+                var OriginalPointB = Object.assign({}, pathCoordinates[index + 1]);
+
+                const pointA = Object.assign({}, pathCoordinates[index]);
+                const pointB = Object.assign({}, pathCoordinates[index + 1]);
+                pointA.x = pointA.x * hd, pointA.y = pointA.y * vd,
+                    pointB.x = pointB.x * hd, pointB.y = pointB.y * vd;
+                // left side calculation
+                if ((cy >= pointA.y && cy <= pointB.y) || (cy >= pointB.y && cy <= pointA.y)) {
+                    var distance = Math.abs(circleLeftPoint.x - pointA.x);
+                    distanceObj[obstacle].left.push(distance/vd);
+                    // console.log(`Left: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+                // right side calculation
+                if ((cy >= pointA.y && cy <= pointB.y) || (cy >= pointB.y && cy <= pointA.y)) {
+                    var distance = Math.abs(circleRightPoint.x - pointA.x);
+                    distanceObj[obstacle].right.push(distance/vd);
+                    // console.log(`Right: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+                // bottom side calculation
+                if ((cx >= pointA.x && cx <= pointB.x) || (cx >= pointB.x && cx <= pointA.x)) {
+                    var distance = Math.abs(circleBottomPoint.y - pointA.y);
+                    distanceObj[obstacle].bottom.push(distance/hd);
+                    // console.log(`Bottom: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+                // top side calculation
+                if ((cx >= pointA.x && cx <= pointB.x) || (cx >= pointB.x && cx <= pointA.x)) {
+                    var distance = Math.abs(circleTopPoint.y - pointA.y);
+                    distanceObj[obstacle].top.push(distance/hd);
+                    // console.log(`Up: (${OriginalPointA.x},${OriginalPointA.y}) and (${OriginalPointB.x},${OriginalPointB.y}) :  ${distance}`);
+                }
+            }
+        }
+    }
+    console.log(distanceObj);
+}
+
+
+/*
+* point A and point B are points on the path which are joined
+* Pxy is an egde point on the circle
+* Bxy is an edge point on the bounding svg
+* Here, PointA and PointB points are used to get a straight line equation A1x + B1y + C1 = 0
+* Then, solve for Pxy and Bxy to get A2x + B2y + C2 = 0
+* Now if the two lines intersect, then distance d is to be calculated
+*/
+var getDistanceBetweenLineAndPoint = function (pointA, pointB, Pxy, Bxy) {
+    pointA = Object.assign({}, pointA);
+    pointB = Object.assign({}, pointB);
+    Pxy = Object.assign({}, Pxy);
+    Bxy = Object.assign({}, Bxy);
+    console.log(pointA, pointB, Pxy, Bxy);
+
+    pointA.x = pointA.x * hd, pointA.y = pointA.y * vd,
+        pointB.x = pointB.x * hd, pointB.y = pointB.y * vd;
+    console.log(pointA, pointB, Pxy, Bxy);
+
+    /*
+    * getting line equation of two points (x1,y1) and (x2,y2)
+    * A = y2 - y1
+    * B = x1 - x2
+    * C = Ax1 + By1
+     */
+    // getting line equation A1x + B1y + C1 = 0 from pointA and pointB
+    var A1 = pointB.y - pointA.y,
+        B1 = pointA.x - pointB.x,
+        C1 = (A1 * pointA.x) + (B1 * pointA.y);
+
+    // getting line equation A2x + B2y + C2 = 0 from Pxy and Bxy
+    var A2 = Pxy.y - Bxy.y,
+        B2 = Bxy.x - Pxy.x,
+        C2 = (Pxy.x * Bxy.y) - (Bxy.x * Pxy.y);
+
+    // Noww check for intersection
+    var det = A1 * B2 - A2 * B1;
+    if (det == 0) {
+        // the two lines are parallel
+        console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) run parallel`);
+    } else {
+        // find intersection coordinates
+        var x = (B2 * C1 - B1 * C2) / det,
+            y = (A1 * C2 - A2 * C1) / det;
+        console.log(`intersection point: (${x}, ${y})`)
+        // find the distance
+        // |A*X0 + B*Y0 + C| / sqrt(A*A + B*B)
+        var distance = Math.abs(A1 * Pxy.x + B1 * Pxy.y + C1) / Math.sqrt(A1 * A1 + B1 * B1);
+        console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) distance:${distance}`);
+
+        // find distance between intersection point and Pxy
+        // Distance between two points P(x1, y1) and Q(x2, y2) is given by:
+        // d(P,Q) = Math.sqrt(Math.pow((x2-x1),2) + Math.pow((y2-y1),2))
+        var dPQ = Math.sqrt(Math.pow((Pxy.x - x), 2) + Math.pow((Pxy.y - y), 2));
+        console.log((Pxy.x - x), (Pxy.y - y))
+        console.log(`Point to point difference: ${dPQ}`)
+
+    }
+
+    // var a = pointA.y - pointB.y,
+    //     b = pointB.x - pointA.x,
+    //     c = (pointA.x * pointB.y) - (pointB.x * pointA.y),
+    //     distance = Math.abs(a * Pxy.x + b * Pxy.y + c) / Math.sqrt(a * a + b * b);
+    //     console.log(`pointA: (${pointA.x},${pointA.y})  pointB: (${pointB.x},${pointB.y}) distance:${distance}`);
+    // return distance;
 }
